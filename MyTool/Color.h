@@ -21,7 +21,7 @@ typedef unsigned int u_int;
 
 namespace Tools
 {
-	namespace Consol
+	namespace Console
 	{
 		#define BOLD_TEXT "\033[1m"					// Gras
 		#define ITALIC_TEXT "\033[3m"				// Italique

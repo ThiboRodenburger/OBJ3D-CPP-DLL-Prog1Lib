@@ -5,7 +5,7 @@
 #include "Color.h"
 
 
-MYTOOL_API void Tools::Consol::SetCursorPosition(const u_int& _x, const u_int& _y, const bool _cursor)
+MYTOOL_API void Tools::Console::SetCursorPosition(const u_int& _x, const u_int& _y, const bool _cursor)
 {
 	static const HANDLE _hOut = GetStdHandle(STD_OUTPUT_HANDLE);
 	CONSOLE_CURSOR_INFO _info;
@@ -17,7 +17,7 @@ MYTOOL_API void Tools::Consol::SetCursorPosition(const u_int& _x, const u_int& _
 	SetConsoleCursorPosition(_hOut, coord);
 }
 
-MYTOOL_API Coord Tools::Consol::GetCenterConsole()
+MYTOOL_API Coord Tools::Console::GetCenterConsole()
 {
 	CONSOLE_SCREEN_BUFFER_INFO _csbi;
 	int _columns, _rows;
@@ -31,7 +31,7 @@ MYTOOL_API Coord Tools::Consol::GetCenterConsole()
 bool CheckConsoleSize(Coord& _center, Coord& _previousCenter, const string& _text, const int _size = 1)
 {
 	const string& _errorText = "Agrandissez la taille de la console !";
-	_center = Tools::Consol::GetCenterConsole();
+	_center = Tools::Console::GetCenterConsole();
 	if (_previousCenter.x != _center.x || _previousCenter.y != _center.y) system("cls");
 
 	if (_center.x < _text.size() || _center.y < _size)
@@ -41,7 +41,7 @@ bool CheckConsoleSize(Coord& _center, Coord& _previousCenter, const string& _tex
 			system("cls");
 			return true;
 		}
-		Tools::Consol::SetCursorPosition((_center.x - u_int(_errorText.size())) / 2, 0);
+		Tools::Console::SetCursorPosition((_center.x - u_int(_errorText.size())) / 2, 0);
 		cout << BLINK_TEXT RED << _errorText << RESET;
 		_previousCenter = _center;
 		return true;
@@ -50,7 +50,7 @@ bool CheckConsoleSize(Coord& _center, Coord& _previousCenter, const string& _tex
 }
 
 
-MYTOOL_API void Tools::Consol::DisplayCenterLine(const string& _text, const Coord& _padding, const int _exitKey)
+MYTOOL_API void Tools::Console::DisplayCenterLine(const string& _text, const Coord& _padding, const int _exitKey)
 {
 	int _key = 0;
 	Coord _center = GetCenterConsole();
@@ -69,7 +69,7 @@ MYTOOL_API void Tools::Consol::DisplayCenterLine(const string& _text, const Coor
 	} while (_key != _exitKey);
 }
 
-MYTOOL_API void Tools::Consol::DisplayCenterLineWithInput(const string& _text, const Coord& _padding, int& _input)
+MYTOOL_API void Tools::Console::DisplayCenterLineWithInput(const string& _text, const Coord& _padding, int& _input)
 {
 	Coord _center = GetCenterConsole();
 	Coord _previousCenter = _center;
@@ -88,7 +88,7 @@ MYTOOL_API void Tools::Consol::DisplayCenterLineWithInput(const string& _text, c
 	} while (true);
 }
 
-MYTOOL_API void Tools::Consol::DisplayCenterMultiLine(const string* _textArray, const u_int& _size, const Coord& _padding, const int _exitKey)
+MYTOOL_API void Tools::Console::DisplayCenterMultiLine(const string* _textArray, const u_int& _size, const Coord& _padding, const int _exitKey)
 {
 	int _key = 0;
 	Coord _center = GetCenterConsole();
@@ -110,7 +110,7 @@ MYTOOL_API void Tools::Consol::DisplayCenterMultiLine(const string* _textArray, 
 	} while (_key != _exitKey);
 }
 
-MYTOOL_API void Tools::Consol::DisplayCenterMultiLineWithInput(const string* _textArray, const u_int& _size, int& _input, const Coord& _padding)
+MYTOOL_API void Tools::Console::DisplayCenterMultiLineWithInput(const string* _textArray, const u_int& _size, int& _input, const Coord& _padding)
 {
 	Coord _center = GetCenterConsole();
 	Coord _previousCenter = _center;
@@ -132,7 +132,7 @@ MYTOOL_API void Tools::Consol::DisplayCenterMultiLineWithInput(const string* _te
 	} while (true);
 }
 
-MYTOOL_API void Tools::Consol::DisplayRainbowCenterLine(const string& _text, const Coord& _padding, const bool _sync, const int _exitKey)
+MYTOOL_API void Tools::Console::DisplayRainbowCenterLine(const string& _text, const Coord& _padding, const bool _sync, const int _exitKey)
 {
 	int _key = 0;
 	Coord _center = GetCenterConsole();
@@ -151,7 +151,7 @@ MYTOOL_API void Tools::Consol::DisplayRainbowCenterLine(const string& _text, con
 	} while (_key != _exitKey);
 }
 
-MYTOOL_API void Tools::Consol::DisplayRainbowCenterMultiLine(const string* _textArray, const u_int& _size, const Coord& _padding, const bool _sync, const int _exitKey)
+MYTOOL_API void Tools::Console::DisplayRainbowCenterMultiLine(const string* _textArray, const u_int& _size, const Coord& _padding, const bool _sync, const int _exitKey)
 {
 	int _key = 0;
 	Coord _center = GetCenterConsole();
@@ -183,7 +183,7 @@ MYTOOL_API void Tools::Consol::DisplayRainbowCenterMultiLine(const string* _text
 	delete[] _bob;
 }
 
-MYTOOL_API void Tools::Consol::DisplayRainbowCenterMultiLineWithInput(const string* _textArray, const u_int& _size, int& _input, const Coord& _padding, const bool _sync)
+MYTOOL_API void Tools::Console::DisplayRainbowCenterMultiLineWithInput(const string* _textArray, const u_int& _size, int& _input, const Coord& _padding, const bool _sync)
 {
 	Coord _center = GetCenterConsole();
 	Coord _previousCenter = _center;

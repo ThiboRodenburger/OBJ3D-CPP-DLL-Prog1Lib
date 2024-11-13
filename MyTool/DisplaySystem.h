@@ -27,7 +27,7 @@ struct Coord
 
 namespace Tools
 {
-	namespace Consol
+	namespace Console
 	{
 		/// <summary>
 		/// Permet de définir la position du curseur dans la console

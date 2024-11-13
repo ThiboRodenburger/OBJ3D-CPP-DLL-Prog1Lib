@@ -9,6 +9,6 @@ int main()
     FileStream _file = FileStream("bob.txt", true);
 
     //_file.Write("\nBob1", _file.ComputeLenghOfFile());
-    Consol::DisplayRainbowCenterMultiLine(_file.ReadAll(), _file.ComputeLineOfFile());
+    Console::DisplayRainbowCenterMultiLine(_file.ReadAll(), _file.ComputeLineOfFile());
     //DISPLAY(_file.ReadAll(), true);
 }

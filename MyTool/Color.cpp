@@ -1,7 +1,7 @@
 #include "pch.h"
 #include "Color.h"
 
-MYTOOL_API string Tools::Consol::RainbowEveryChar(const string& _word)
+MYTOOL_API string Tools::Console::RainbowEveryChar(const string& _word)
 {
 	string _newWord = "";
 	for (u_int _i = 0; _i < _word.length(); _i++)
@@ -12,12 +12,12 @@ MYTOOL_API string Tools::Consol::RainbowEveryChar(const string& _word)
 	return _newWord + RESET;
 }
 
-MYTOOL_API string Tools::Consol::RainbowString(const string& _word)
+MYTOOL_API string Tools::Console::RainbowString(const string& _word)
 {
 	return GetRandomColor() + _word + RESET;
 }
 
-MYTOOL_API void Tools::Consol::DisplayRainbow(const string& _text)
+MYTOOL_API void Tools::Console::DisplayRainbow(const string& _text)
 {
 	while (!_kbhit())
 	{
@@ -30,7 +30,7 @@ MYTOOL_API void Tools::Consol::DisplayRainbow(const string& _text)
 	}
 }
 
-MYTOOL_API string Tools::Consol::GetRandomColor()
+MYTOOL_API string Tools::Console::GetRandomColor()
 {
 	const string _rainbowTable[] =
 	{
