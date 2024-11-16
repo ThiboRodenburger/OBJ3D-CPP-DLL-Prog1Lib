@@ -2,11 +2,15 @@
 #include "FileStream.h"
 
 Tools::FileStream::FileStream(const string& _fullPath, const bool _autoCreate,
+	 const string& _cryptageKey, const bool _isCrypt,
 	const ios_base::openmode& _openMode)
 {
 	openMode = _openMode;
 	openMode |= ios_base::binary;
 	fullPath = _fullPath;
+	isCrypt = _isCrypt;
+	cryptageKey = _cryptageKey;
+	cryptageKeySize = static_cast<u_int>(cryptageKey.size());
 	if (_autoCreate)
 	{
 		ifstream(_fullPath, ios_base::app);
@@ -20,7 +24,7 @@ string* Tools::FileStream::ReadAll()
 	string* _contents = new string[_fileSize];
 	for (u_int _i = 0; _i < _fileSize; _i++)
 	{
-		_contents[_i] = ReadLine(GetOffset(0, _i));
+		_contents[_i] = ReadLine(static_cast<u_int>(GetOffset(0, _i)));
 	}
 	return _contents;
 }
@@ -81,7 +85,7 @@ bool Tools::FileStream::Remove(const streamsize& _length, const streampos& _posi
 	if (_position != -1)
 	{
 		stream.seekp(_position);
-		getline(stream, _remainingContent, '\0');
+		getline(stream, _remainingContent, '\a');
 
 		stream.clear();
 		stream.seekg(_position+ _length);
@@ -94,8 +98,21 @@ bool Tools::FileStream::Remove(const streamsize& _length, const streampos& _posi
 	return stream.good();
 }
 
+bool Tools::FileStream::Clear()
+{
+	// Todo 
+	/*ofstream _clearStream = ofstream(fullPath, ios::out);
+	if (!IsValid()) return false;
+	_clearStream << "";*/
+	return true;
+}
+
+
 bool Tools::FileStream::Write(const string& _content, const streampos& _position)
 {
+	if (isCrypt) return Uncrypt() && 
+			Write(_content.c_str(), _content.size(), _position)
+			&& Crypt();
 	return Write(_content.c_str(), _content.size(), _position);
 }
 
@@ -109,7 +126,7 @@ streampos Tools::FileStream::GetOffset(const u_int& _horizontal, const u_int& _v
 	{
 		if (stream.get(_c))
 		{
-			const int _bob = stream.tellg();
+			const int _bob = static_cast<const int>(stream.tellg());
 			if (_c == '\n') _l++;
 			_index++;
 		}
@@ -133,6 +150,42 @@ streampos Tools::FileStream::ComputeLenghOfFile()
 	const streampos _lengh = stream.tellg();
 	stream.seekp(0);
 	return _lengh;
+}
+
+bool Tools::FileStream::Crypt()
+{
+	if (!IsValid() || isCrypt) return false;
+	string _modifiedText;
+	const string& _baseText = Read(ComputeLenghOfFile());
+	const u_int& _baseTextSize = static_cast<u_int>(_baseText.size());
+	int _modifiedInt;
+	for (u_int _index = 0; _index < _baseTextSize; _index++)
+	{
+		_modifiedInt = int(_baseText[_index] + cryptageKey[_index % cryptageKeySize]);
+		_modifiedText += char(_modifiedInt);
+	}
+	Clear();
+	Write(_modifiedText);
+	isCrypt = true;
+	return true;
+}
+
+bool Tools::FileStream::Uncrypt()
+{
+	if (!IsValid() || !isCrypt) return false;
+	string _modifiedText;
+	const string& _baseText = Read(ComputeLenghOfFile());
+	const u_int& _baseTextSize = static_cast<u_int>(_baseText.size());
+	int _modifiedInt;
+	for (u_int _index = 0; _index < _baseTextSize; _index++)
+	{
+		_modifiedInt = int(_baseText[_index] - cryptageKey[_index % cryptageKeySize]);
+		_modifiedText += char(_modifiedInt);
+	}
+	Clear();
+	Write(_modifiedText);
+	isCrypt = false;
+	return false;
 }
 
 bool Tools::FileStream::Write(const char* _content, const streamsize& _lengh, const streampos& _position)
@@ -162,7 +215,7 @@ int Tools::FileStream::ComputeLineOfFile()
 {
 	int _line = 0;
 	char _c;
-	while(stream.get(_c))
+	while (stream.get(_c))
 	{
 		if (_c == '\n') _line++;
 	}

@@ -16,6 +16,9 @@ namespace Tools
 	class MYTOOL_API FileStream
 	{
 		string fullPath;
+		string cryptageKey;
+		u_int cryptageKeySize;
+		bool isCrypt;
 		fstream stream;
 		ios_base::openmode openMode;
 
@@ -29,7 +32,8 @@ namespace Tools
 
 		FileStream() = default;
 
-		FileStream(const string& _fullPath, const bool _autoCreate = false, 
+		FileStream(const string& _fullPath, const bool _autoCreate = false
+			, const string& _cryptageKey = "LaCleeDesP1", const bool _isCrypt = false,
 			const ios_base::openmode& _openMode = ios_base::in | ios_base::out | ios_base::binary);
 
 	public:
@@ -37,7 +41,20 @@ namespace Tools
 		{
 			return stream.is_open();
 		}
-
+		void SetCryptageKey(const string& _newKey)
+		{
+			if (isCrypt) return;
+			cryptageKey = _newKey;
+		}
+		void SetIsCryptFile(const bool _isCrypt = true)
+		{
+			isCrypt = _isCrypt;
+		}
+		void SetCryptFileWithKey(const string& _newKey)
+		{
+			SetIsCryptFile();
+			SetCryptageKey(_newKey);
+		}
 	public:
 
 		// operator == 
@@ -58,6 +75,8 @@ namespace Tools
 
 		bool Remove(const streamsize& _length, const streampos& _position = -1);
 
+		bool Clear();
+
 		bool Write(const string& _content, const streampos& _position=-1);
 
 		streampos GetOffset(const u_int& _horizontal, const u_int& _vertical);
@@ -65,6 +84,11 @@ namespace Tools
 		int ComputeLineOfFile();
 
 		streampos ComputeLenghOfFile();
+
+		bool Crypt();
+
+		bool Uncrypt();
+
 	private:
 		bool Write(const char* _content, const streamsize& _lengh, const streampos& _position);
 	};
