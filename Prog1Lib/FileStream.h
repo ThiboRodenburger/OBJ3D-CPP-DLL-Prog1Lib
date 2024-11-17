@@ -55,6 +55,7 @@ namespace Tools
 			SetIsCryptFile();
 			SetCryptageKey(_newKey);
 		}
+
 	public:
 
 		// operator == 
@@ -69,11 +70,11 @@ namespace Tools
 
 		string Read(const streamsize& _length, const streampos& _position = -1);
 
-		string ReadLine(const u_int _lineIndex = 0);
+		string ReadLine(const u_int& _lineIndex = 0);
 
-		bool RemoveLine(const u_int _lineIndex = 0);
+		bool RemoveLine(const u_int& _lineIndex = 0);
 
-		bool Remove(const streamsize& _length, const streampos& _position = -1);
+		bool Remove(const streamsize& _length, const streampos& _position);
 
 		bool Clear();
 
