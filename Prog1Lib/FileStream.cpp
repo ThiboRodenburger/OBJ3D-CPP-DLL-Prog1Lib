@@ -1,8 +1,8 @@
-#include "pch.h"
+﻿#include "pch.h"
 #include "FileStream.h"
 
 Tools::FileStream::FileStream(const string& _fullPath, const bool _autoCreate,
-	 const string& _cryptageKey, const bool _isCrypt,
+	const string& _cryptageKey, const bool _isCrypt,
 	const ios_base::openmode& _openMode)
 {
 	openMode = _openMode;
@@ -58,7 +58,8 @@ string Tools::FileStream::ReadLine(const u_int& _lineIndex)
 bool Tools::FileStream::RemoveLine(const u_int& _lineIndex)
 {
 
-	const streampos& _cursor = _lineIndex > static_cast<u_int>(ComputeLineOfFile()) ? ComputeLenghOfFile() : GetOffset(0, _lineIndex);
+	streampos _cursor = _lineIndex > static_cast<u_int>(ComputeLineOfFile()) ? ComputeLenghOfFile() : GetOffset(0, _lineIndex) ;
+	if(ComputeLineOfFile() > 1) _cursor = _cursor.operator-(_lineIndex == ComputeLineOfFile() ? 1 : 0);
 	return Remove(ReadLine(_lineIndex).size() + 1, _cursor);
 }
 
@@ -90,9 +91,9 @@ bool Tools::FileStream::Clear()
 
 bool Tools::FileStream::Write(const string& _content, const streampos& _position)
 {
-	if (isCrypt) 
-		return Uncrypt() && 
-		Write(_content.c_str(), _content.size(), _position) 
+	if (isCrypt)
+		return Uncrypt() &&
+		Write(_content.c_str(), _content.size(), _position)
 		&& Crypt();
 	return Write(_content.c_str(), _content.size(), _position);
 }
@@ -103,12 +104,12 @@ streampos Tools::FileStream::GetOffset(const u_int& _horizontal, const u_int& _v
 	u_int _index = 0, _l = 0;
 	char _c;
 	stream.seekg(0, stream.beg);
-	while (_l != _vertical ) // Aller � la bonne ligne
+	while (_l != _vertical) // Aller à la bonne ligne
 	{
 		if (stream.get(_c))
 		{
 			const int _bob = static_cast<const int>(stream.tellg());
-			if (_c == '\n' || _c == '\r') _l++;
+			if (_c == '\n') _l++;
 			_index++;
 		}
 		else
@@ -126,7 +127,7 @@ streampos Tools::FileStream::GetOffset(const u_int& _horizontal, const u_int& _v
 
 streampos Tools::FileStream::ComputeLenghOfFile()
 {
-	
+
 	stream.seekp(0, stream.end);
 	const streampos& _lengh = stream.tellg();
 	stream.seekp(0);
@@ -146,7 +147,7 @@ bool Tools::FileStream::Crypt()
 		_modifiedText += char(_modifiedInt);
 	}
 	Clear();
-	Write(_modifiedText.c_str(), _modifiedText.size(),-1);
+	Write(_modifiedText.c_str(), _modifiedText.size(), -1);
 	isCrypt = true;
 	return true;
 }
@@ -194,7 +195,7 @@ bool Tools::FileStream::Write(const char* _content, const streamsize& _lengh, co
 
 int Tools::FileStream::ComputeLineOfFile()
 {
-	int _line = 0;
+	int _line = 1;
 	char _c;
 	while (stream.get(_c))
 	{
@@ -203,5 +204,5 @@ int Tools::FileStream::ComputeLineOfFile()
 	stream.clear();
 
 	stream.seekg(0, stream.beg);
-	return _line - 1;
+	return _line;
 }

@@ -65,20 +65,20 @@ namespace Tools
 		}
 
 
-		// Afficher un nombre n de lignes à partir d'un index
+		// Afficher un nombre n de lignes Ã  partir d'un index
 		string* ReadAll();
 
 		string Read(const streamsize& _length, const streampos& _position = -1);
 
 		string ReadLine(const u_int& _lineIndex = 0);
-
+    
 		bool RemoveLine(const u_int& _lineIndex = 0);
 
 		bool Remove(const streamsize& _length, const streampos& _position);
 
 		bool Clear();
 
-		bool Write(const string& _content, const streampos& _position=-1);
+		bool Write(const string& _content, const streampos& _position = -1);
 
 		streampos GetOffset(const u_int& _horizontal, const u_int& _vertical);
 
@@ -94,4 +94,3 @@ namespace Tools
 		bool Write(const char* _content, const streamsize& _lengh, const streampos& _position);
 	};
 }
-

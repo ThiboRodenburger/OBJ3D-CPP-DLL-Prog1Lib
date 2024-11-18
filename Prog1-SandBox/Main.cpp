@@ -3,7 +3,9 @@
 #include "DisplaySystem.h"
 #include "DynamicArray.h"
 #include "CharManip.h"
+#include "SaveManager.h"
 
+using namespace std;
 using namespace Tools;
 
 void TestDynamicArray();
@@ -13,9 +15,8 @@ void TestEncryptDecrypt();
 
 class Bob
 {
-    string name;
+	string name;
 public:
-
 	Bob()
 	{
 		name = "";
@@ -28,12 +29,6 @@ public:
 	string GetName()const
 	{
 		return name;
-	}
-
-	// Operator == 
-	bool operator==(const Bob& _bob)const
-	{
-		return name == _bob.name;
 	}
 };
 
@@ -117,4 +112,8 @@ void TestEncryptDecrypt()
 	DISPLAY(_file.Read(_file.ComputeLenghOfFile()), true);
 }
 
-
+void TestSave()
+{
+	SaveManager _sm = SaveManager("uwu.txt");
+	cout << _sm.GetData<string>("ddfefdefd");
+}
