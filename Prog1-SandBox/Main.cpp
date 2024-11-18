@@ -116,3 +116,5 @@ void TestEncryptDecrypt()
 	_file.Uncrypt();
 	DISPLAY(_file.Read(_file.ComputeLenghOfFile()), true);
 }
+
+
