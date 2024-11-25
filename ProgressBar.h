@@ -19,7 +19,7 @@ namespace Tools
 	/// <summary>
 	/// Classe permettant de gérer une barre de progression
 	/// </summary>
-	class MYTOOL_API ProgressBar
+	class MYTOOL_API SoundBar
 	{
 		string name;
 		int currentSound;
